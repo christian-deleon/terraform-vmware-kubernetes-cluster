@@ -6,8 +6,16 @@ data "vsphere_datacenter" "this" {
   name = var.datacenter
 }
 
+data "vsphere_folder" "this" {
+  count = var.create_folder ? 0 : 1
+
+  path = var.folder_path
+}
+
 resource "vsphere_folder" "this" {
-  path          = var.cluster_name
+  count = var.create_folder ? 1 : 0
+
+  path          = var.folder_path
   type          = "vm"
   datacenter_id = data.vsphere_datacenter.this.id
 }
@@ -65,7 +73,7 @@ module "master" {
   network              = var.network
   template             = var.master_vm_template
   datastore            = var.master_datastores[count.index]
-  folder               = vsphere_folder.this.path
+  folder               = var.folder_path
   name                 = "${var.cluster_name}-k8s-master-${count.index + 1}"
   cores                = var.master_cores
   memory               = var.master_memory
@@ -84,12 +92,12 @@ module "worker" {
   compute_cluster      = var.compute_cluster
   network              = var.network
   template             = var.worker_vm_template
+  datastore            = var.worker_datastores[count.index]
+  folder               = var.folder_path
   name                 = "${var.cluster_name}-k8s-worker-${count.index + 1}"
   cores                = var.worker_cores
   memory               = var.worker_memory
   disk_size            = var.worker_disk_size
   additional_disk_size = var.worker_additional_disk_size
   tags                 = ["${vsphere_tag.worker.id}"]
-  datastore            = var.worker_datastores[count.index]
-  folder               = vsphere_folder.this.path
 }

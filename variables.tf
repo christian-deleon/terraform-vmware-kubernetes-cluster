@@ -13,6 +13,18 @@ variable "network" {
   description = "The name of the network to use for the virtual machines."
 }
 
+variable "create_folder" {
+  type        = bool
+  default     = true
+  description = "Whether or not to create a folder for the virtual machines."
+}
+
+variable "folder_path" {
+  type        = string
+  default     = null
+  description = "The path to the folder to use for the virtual machines."
+}
+
 variable "cluster_name" {
   type        = string
   description = "The name of the cluster."
