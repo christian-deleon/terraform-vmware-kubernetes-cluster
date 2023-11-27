@@ -1,0 +1,3 @@
+include:
+  - project: 'devops/terraform/gitlab-ci-template'
+    file: '.gitlab-ci.yml'
