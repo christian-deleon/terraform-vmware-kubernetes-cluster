@@ -58,32 +58,38 @@ module "master" {
   count = length(var.master_datastores)
 
   source  = "gitlab.robochris.net/devops/vmware-virtual-machine/vmware"
-  version = "0.8.0"
+  version = "1.0.0"
 
-  template             = var.vm_template
+  datacenter           = var.datacenter
+  compute_cluster      = var.compute_cluster
+  network              = var.network
+  template             = var.master_vm_template
+  datastore            = var.master_datastores[count.index]
+  folder               = vsphere_folder.this.path
   name                 = "${var.cluster_name}-k8s-master-${count.index + 1}"
   cores                = var.master_cores
   memory               = var.master_memory
-  root_disk_size       = var.master_disk_size
+  disk_size            = var.master_disk_size
   additional_disk_size = var.master_additional_disk_size
   tags                 = count.index == 0 ? ["${vsphere_tag.controlplane_master.id}", "${vsphere_tag.controlplane.id}"] : ["${vsphere_tag.controlplane_slave.id}", "${vsphere_tag.controlplane.id}"]
-  vsphere_datastore    = var.master_datastores[count.index]
-  vsphere_folder       = vsphere_folder.this.path
 }
 
 module "worker" {
   count = length(var.worker_datastores)
 
   source  = "gitlab.robochris.net/devops/vmware-virtual-machine/vmware"
-  version = "0.8.0"
+  version = "1.0.0"
 
-  template             = var.vm_template
+  datacenter           = var.datacenter
+  compute_cluster      = var.compute_cluster
+  network              = var.network
+  template             = var.worker_vm_template
   name                 = "${var.cluster_name}-k8s-worker-${count.index + 1}"
   cores                = var.worker_cores
   memory               = var.worker_memory
-  root_disk_size       = var.worker_disk_size
+  disk_size            = var.worker_disk_size
   additional_disk_size = var.worker_additional_disk_size
   tags                 = ["${vsphere_tag.worker.id}"]
-  vsphere_datastore    = var.worker_datastores[count.index]
-  vsphere_folder       = vsphere_folder.this.path
+  datastore            = var.worker_datastores[count.index]
+  folder               = vsphere_folder.this.path
 }

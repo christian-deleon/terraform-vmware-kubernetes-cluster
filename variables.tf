@@ -3,6 +3,16 @@ variable "datacenter" {
   description = "The name of the datacenter to use for the virtual machines."
 }
 
+variable "compute_cluster" {
+  type        = string
+  description = "The name of the compute cluster to use for the virtual machines."
+}
+
+variable "network" {
+  type        = string
+  description = "The name of the network to use for the virtual machines."
+}
+
 variable "cluster_name" {
   type        = string
   description = "The name of the cluster."
