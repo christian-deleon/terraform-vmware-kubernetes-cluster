@@ -19,6 +19,9 @@ terraform {
       source  = "hashicorp/vsphere"
       version = "~> 2.5.1"
     }
+    gitlab = {
+      source = "gitlabhq/gitlab"
+    }
   }
 }
 
@@ -34,8 +37,8 @@ provider "vsphere" {
 }
 
 module "k8s_cluster" {
-  source = "gitlab.com/terraform2584837/vmware-kubernetes-cluster/vmware"
-  version = "~> 0.11.0"
+  source = "gitlab.robochris.net/devops/vmware-kubernetes-cluster/vmware"
+  version = "~> 1.0.0"
 
   datacenter         = var.datacenter
   cluster_name       = var.cluster_name
