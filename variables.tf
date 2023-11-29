@@ -34,20 +34,16 @@ variable "cluster_name" {
 # Master
 ########################################
 
+variable "master_mapping" {
+  type = list(object({
+    host      = string
+    datastore = string
+  }))
+}
+
 variable "master_vm_template" {
   type        = string
   description = "The name of the template to use for the master nodes."
-}
-
-variable "master_datastores" {
-  type        = list(string)
-  default     = []
-  description = "The datastores to use for the master nodes."
-
-  validation {
-    condition     = length(var.master_datastores) >= 1
-    error_message = "At least one datastore must be specified."
-  }
 }
 
 variable "master_cores" {
@@ -93,20 +89,16 @@ variable "master_additional_disk_size" {
 # Worker
 ########################################
 
+variable "worker_mapping" {
+  type = list(object({
+    host      = string
+    datastore = string
+  }))
+}
+
 variable "worker_vm_template" {
   type        = string
   description = "The name of the template to use for the worker nodes."
-}
-
-variable "worker_datastores" {
-  type        = list(string)
-  default     = []
-  description = "The datastores to use for the worker nodes."
-
-  validation {
-    condition     = length(var.worker_datastores) >= 1
-    error_message = "At least one datastore must be specified."
-  }
 }
 
 variable "worker_cores" {
