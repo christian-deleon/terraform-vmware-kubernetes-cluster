@@ -25,10 +25,6 @@ terraform {
   }
 }
 
-provider "gitlab" {
-  base_url = "https://gitlab.com/api/v4/"
-}
-
 provider "vsphere" {
   user                 = var.vsphere_username
   password             = var.vsphere_password
