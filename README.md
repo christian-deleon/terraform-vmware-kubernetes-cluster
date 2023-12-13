@@ -26,19 +26,55 @@ terraform {
 }
 
 provider "vsphere" {
+  vsphere_server       = "vcenter.example.com"
+  allow_unverified_ssl = true
   user                 = var.vsphere_username
   password             = var.vsphere_password
-  vsphere_server       = var.vsphere_server_ip
-  allow_unverified_ssl = true
 }
 
 module "k8s_cluster" {
   source = "gitlab.robochris.net/devops/vmware-kubernetes-cluster/vmware"
-  version = "~> 1.0.0"
+  version = "~> 1.2.1"
 
-  datacenter         = var.datacenter
-  cluster_name       = var.cluster_name
-  master_vm_template = var.master_vm_template
-  worker_vm_template = var.worker_vm_template
+  datacenter      = "Datacenter"
+  compute_cluster = "cluster-01"
+  network         = "VM Network"
+  create_folder   = true
+  folder_path     = "k8s-cluster"
+  cluster_name    = "k8s-cluster"
+
+  # Master
+  master_vm_template = "ubuntu-20"
+  master_cores       = local.cores
+  master_memory      = local.memory
+  master_disk_size   = local.disk_size
+
+  master_mapping = [
+    {
+      host      = null
+      datastore = "host1_datastore1"
+    },
+    {
+      host      = null
+      datastore = "host2_datastore1"
+    }
+  ]
+
+  # Worker
+  worker_vm_template = "ubuntu-20"
+  worker_cores       = local.cores
+  worker_memory      = local.memory
+  worker_disk_size   = local.disk_size
+
+  worker_mapping = [
+    {
+      host      = null
+      datastore = "host1_datastore1"
+    },
+    {
+      host      = null
+      datastore = "host2_datastore1"
+    }
+  ]
 }
 ```
