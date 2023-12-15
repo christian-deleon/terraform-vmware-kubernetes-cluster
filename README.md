@@ -8,6 +8,19 @@ Set GitLab Token
 export GITLAB_TOKEN="<gitlab_token>"
 ```
 
+Example `variables.tf`
+
+```hcl
+variable "vsphere_username" {
+  type = string
+}
+
+variable "vsphere_password" {
+  type      = string
+  sensitive = true
+}
+```
+
 Example `main.tf`
 
 ```hcl
