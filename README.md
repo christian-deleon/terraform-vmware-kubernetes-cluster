@@ -45,6 +45,10 @@ provider "vsphere" {
   password             = var.vsphere_password
 }
 
+locals {
+  vm_template = "alma8-server"
+}
+
 module "k8s_cluster" {
   source = "gitlab.robochris.net/devops/vmware-kubernetes-cluster/vmware"
   version = "~> 1.2.1"
@@ -57,36 +61,44 @@ module "k8s_cluster" {
   cluster_name    = "k8s-cluster"
 
   # Master
-  master_vm_template = "ubuntu-20"
-  master_cores       = local.cores
-  master_memory      = local.memory
-  master_disk_size   = local.disk_size
+  master_vm_template = local.vm_template
+  master_cores       = 6
+  master_memory      = 8192
+  master_disk_size   = 100
 
   master_mapping = [
     {
-      host      = null
+      host      = "esxi1.local"
       datastore = "host1_datastore1"
     },
     {
-      host      = null
+      host      = "esxi2.local"
       datastore = "host2_datastore1"
+    },
+    {
+      host      = "esxi3.local"
+      datastore = "host3_datastore1"
     }
   ]
 
   # Worker
-  worker_vm_template = "ubuntu-20"
-  worker_cores       = local.cores
-  worker_memory      = local.memory
-  worker_disk_size   = local.disk_size
+  worker_vm_template = local.vm_template
+  worker_cores       = 8
+  worker_memory      = 16384
+  worker_disk_size   = 250
 
   worker_mapping = [
     {
-      host      = null
+      host      = "esxi1.local"
       datastore = "host1_datastore1"
     },
     {
-      host      = null
+      host      = "esxi2.local"
       datastore = "host2_datastore1"
+    },
+    {
+      host      = "esxi3.local"
+      datastore = "host3_datastore1"
     }
   ]
 }
