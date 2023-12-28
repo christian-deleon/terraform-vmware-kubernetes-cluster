@@ -58,7 +58,7 @@ resource "vsphere_tag" "worker" {
 
 module "master" {
   source  = "gitlab.robochris.net/devops/vmware-virtual-machine/vmware"
-  version = "1.3.1"
+  version = "1.3.2"
 
   count = length(var.master_mapping)
 
@@ -81,7 +81,7 @@ module "master" {
 
 module "worker" {
   source  = "gitlab.robochris.net/devops/vmware-virtual-machine/vmware"
-  version = "1.3.1"
+  version = "1.3.2"
 
   count = length(var.worker_mapping)
 
