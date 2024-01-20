@@ -16,7 +16,7 @@ variable "network" {
 variable "create_folder" {
   type        = bool
   default     = true
-  description = "Whether or not to create a folder for the virtual machines."
+  description = "Whether to create a folder for the virtual machines."
 }
 
 variable "folder_path" {
@@ -28,6 +28,12 @@ variable "folder_path" {
 variable "cluster_name" {
   type        = string
   description = "The name of the cluster."
+}
+
+variable "create_baseline_snapshot" {
+  type        = bool
+  default     = true
+  description = "Whether to create a baseline snapshot for the virtual machines."
 }
 
 ########################################

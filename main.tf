@@ -57,47 +57,49 @@ resource "vsphere_tag" "worker" {
 ########################################
 
 module "master" {
-  source  = "gitlab.robochris.net/devops/vmware-virtual-machine/vmware"
-  version = "1.3.2"
+  source  = "gitlab.com/devops9483002/vmware-virtual-machine/vmware"
+  version = "1.5.0"
 
   count = length(var.master_mapping)
 
-  datacenter           = var.datacenter
-  compute_cluster      = var.compute_cluster
-  network              = var.network
-  host                 = var.master_mapping[count.index].host
-  datastore            = var.master_mapping[count.index].datastore
-  template             = var.master_vm_template
-  folder_path          = var.folder_path
-  name                 = "${var.cluster_name}-master-${count.index + 1}"
-  cores                = var.master_cores
-  memory               = var.master_memory
-  disk_size            = var.master_disk_size
-  additional_disk_size = var.master_additional_disk_size
-  tags                 = count.index == 0 ? ["${vsphere_tag.controlplane_master.id}", "${vsphere_tag.controlplane.id}"] : ["${vsphere_tag.controlplane_slave.id}", "${vsphere_tag.controlplane.id}"]
+  datacenter               = var.datacenter
+  compute_cluster          = var.compute_cluster
+  network                  = var.network
+  host                     = var.master_mapping[count.index].host
+  datastore                = var.master_mapping[count.index].datastore
+  template                 = var.master_vm_template
+  folder_path              = var.folder_path
+  name                     = "${var.cluster_name}-master-${count.index + 1}"
+  cores                    = var.master_cores
+  memory                   = var.master_memory
+  disk_size                = var.master_disk_size
+  additional_disk_size     = var.master_additional_disk_size
+  create_baseline_snapshot = var.create_baseline_snapshot
+  tags                     = count.index == 0 ? ["${vsphere_tag.controlplane_master.id}", "${vsphere_tag.controlplane.id}"] : ["${vsphere_tag.controlplane_slave.id}", "${vsphere_tag.controlplane.id}"]
 
   depends_on = [vsphere_folder.this]
 }
 
 module "worker" {
-  source  = "gitlab.robochris.net/devops/vmware-virtual-machine/vmware"
-  version = "1.3.2"
+  source  = "gitlab.com/devops9483002/vmware-virtual-machine/vmware"
+  version = "1.5.0"
 
   count = length(var.worker_mapping)
 
-  datacenter           = var.datacenter
-  compute_cluster      = var.compute_cluster
-  network              = var.network
-  host                 = var.worker_mapping[count.index].host
-  datastore            = var.worker_mapping[count.index].datastore
-  template             = var.worker_vm_template
-  folder_path          = var.folder_path
-  name                 = "${var.cluster_name}-worker-${count.index + 1}"
-  cores                = var.worker_cores
-  memory               = var.worker_memory
-  disk_size            = var.worker_disk_size
-  additional_disk_size = var.worker_additional_disk_size
-  tags                 = ["${vsphere_tag.worker.id}"]
+  datacenter               = var.datacenter
+  compute_cluster          = var.compute_cluster
+  network                  = var.network
+  host                     = var.worker_mapping[count.index].host
+  datastore                = var.worker_mapping[count.index].datastore
+  template                 = var.worker_vm_template
+  folder_path              = var.folder_path
+  name                     = "${var.cluster_name}-worker-${count.index + 1}"
+  cores                    = var.worker_cores
+  memory                   = var.worker_memory
+  disk_size                = var.worker_disk_size
+  additional_disk_size     = var.worker_additional_disk_size
+  create_baseline_snapshot = var.create_baseline_snapshot
+  tags                     = ["${vsphere_tag.worker.id}"]
 
   depends_on = [vsphere_folder.this]
 }
